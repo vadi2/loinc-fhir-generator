@@ -21,7 +21,7 @@ This repository only has the generator. It contains no LOINC content: you downlo
    python3 generate.py Loinc_2.83.zip --previous Loinc_2.82.zip
    ```
 
-   This writes `CodeSystem-loinc-2.83-parts-answers.json` in about 10 seconds (around 160 MB), and prints how many codes of each kind it contains. The version is read from the zip file name; use `--version` if you renamed it, and `-o` to choose another output file. An extracted release folder works in place of a zip.
+   This writes `CodeSystem-loinc-2.83-parts-answers.json` in about 10 seconds (around 95 MB), and prints how many codes of each kind it contains. The version is read from the zip file name; use `--version` if you renamed it, and `-o` to choose another output file. An extracted release folder works in place of a zip.
 
 Instead of the previous zip, `--previous` also accepts a CodeSystem generated earlier with this script, so each release can build on the last one.
 
@@ -33,7 +33,7 @@ LOINC never deletes or reuses codes, but each release's files leave some out. In
 
 | Codes | Source file | Display | Properties |
 |---|---|---|---|
-| Terms (e.g. `2160-0`) | `LoincTable/Loinc.csv` | `LONG_COMMON_NAME`; `DisplayName` as a designation | `STATUS`, `inactive` (deprecated), `SHORTNAME`, `VersionFirstReleased`, `VersionLastChanged`, `EXTERNAL_COPYRIGHT_NOTICE`, `CLASS`, `CLASSTYPE`, `ORDER_OBS`, `EXAMPLE_UCUM_UNITS`, the six part axes (`COMPONENT`, `PROPERTY`, `TIME_ASPCT`, `SYSTEM`, `SCALE_TYP`, `METHOD_TYP`) as LP codings from `LoincPartLink_Primary.csv`, `answer-list` from `LoincAnswerListLink.csv` |
+| Terms (e.g. `2160-0`) | `LoincTable/Loinc.csv` | `LONG_COMMON_NAME`; `DisplayName` as a designation | `STATUS`, `inactive` (deprecated), `SHORTNAME`, `VersionFirstReleased`, `VersionLastChanged`, `EXTERNAL_COPYRIGHT_NOTICE`, `CLASS`, `CLASSTYPE`, `ORDER_OBS`, `EXAMPLE_UCUM_UNITS`, `answer-list` from `LoincAnswerListLink.csv` |
 | Parts (`LP…`) | `AccessoryFiles/PartFile/Part.csv` | `PartDisplayName`; `PartName` as a designation when different | `STATUS`, `PartTypeName`, `inactive` |
 | Answer lists (`LL…`) | `AccessoryFiles/AnswerFile/AnswerList.csv` | `AnswerListName` | `STATUS`, `OID`, `answer` (LA codings) |
 | Answers (`LA…`) | `AccessoryFiles/AnswerFile/AnswerList.csv` | `DisplayText` (from the first answer list it appears in) | `STATUS`, `answer-list` (LL codings) |
@@ -42,7 +42,7 @@ LOINC never deletes or reuses codes, but each release's files leave some out. In
 
 For LOINC 2.83 the output has 112,405 terms, 75,165 LP parts, 5,009 LL answer lists and 22,363 LA answers.
 
-Not included: the LP grouping codes that only exist in `ComponentHierarchyBySystem.csv` (the folders of LOINC's component hierarchy), LOINC Groups (`LG…`) and translations from `LinguisticVariants`.
+Not included: links from terms to their six LP parts (`COMPONENT`, `PROPERTY`, `TIME_ASPCT`, `SYSTEM`, `SCALE_TYP`, `METHOD_TYP` from `LoincPartLink_Primary.csv`), which would add about 65 MB; the LP grouping codes that only exist in `ComponentHierarchyBySystem.csv` (the folders of LOINC's component hierarchy), LOINC Groups (`LG…`) and translations from `LinguisticVariants`.
 
 ## Licenses
 

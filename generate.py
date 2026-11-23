@@ -11,14 +11,6 @@ from io import TextIOWrapper
 
 csv.field_size_limit(sys.maxsize)
 
-PART_PROPS = {
-    "COMPONENT": "COMPONENT",
-    "PROPERTY": "PROPERTY",
-    "TIME": "TIME_ASPCT",
-    "SYSTEM": "SYSTEM",
-    "SCALE": "SCALE_TYP",
-    "METHOD": "METHOD_TYP",
-}
 LOINC = "http://loinc.org"
 COPYRIGHT = (
     "This material contains content from LOINC (http://loinc.org). LOINC is copyright "
@@ -60,12 +52,6 @@ def coding(code, display=None):
 
 
 def build(release, version, previous=None):
-    part_links = defaultdict(list)
-    for r in release.rows("AccessoryFiles/PartFile/LoincPartLink_Primary.csv"):
-        p = PART_PROPS.get(r["PartTypeName"])
-        if p:
-            part_links[r["LoincNumber"]].append(prop(p, "valueCoding", coding(r["PartNumber"], r["PartName"])))
-
     term_lists = defaultdict(list)
     for r in release.rows("AccessoryFiles/AnswerFile/LoincAnswerListLink.csv"):
         term_lists[r["LoincNumber"]].append(prop("answer-list", "valueCoding", coding(r["AnswerListId"], r["AnswerListName"])))
@@ -88,7 +74,6 @@ def build(release, version, previous=None):
             props.append(prop("ORDER_OBS", "valueString", r["ORDER_OBS"]))
         if r["EXAMPLE_UCUM_UNITS"]:
             props.append(prop("EXAMPLE_UCUM_UNITS", "valueString", r["EXAMPLE_UCUM_UNITS"]))
-        props += part_links.get(code, [])
         props += term_lists.get(code, [])
         c["property"] = props
         concepts.append(c)
@@ -159,12 +144,6 @@ def build(release, version, previous=None):
         ("CLASSTYPE", "string", "1=Laboratory, 2=Clinical, 3=Claims attachments, 4=Surveys"),
         ("ORDER_OBS", "string", "Order, Observation, Both or Subset"),
         ("EXAMPLE_UCUM_UNITS", "string", "Example UCUM units"),
-        ("COMPONENT", "Coding", "First major axis: component or analyte"),
-        ("PROPERTY", "Coding", "Second major axis: property observed"),
-        ("TIME_ASPCT", "Coding", "Third major axis: timing of the measurement"),
-        ("SYSTEM", "Coding", "Fourth major axis: type of specimen or system"),
-        ("SCALE_TYP", "Coding", "Fifth major axis: scale of measurement"),
-        ("METHOD_TYP", "Coding", "Sixth major axis: method of measurement"),
         ("answer-list", "Coding", "Answer list (LL) linked to a term, or containing an answer"),
         ("answer", "Coding", "Answer (LA) contained in an answer list"),
         ("PartTypeName", "string", "Type of a LOINC part (LP)"),
