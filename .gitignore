@@ -1,0 +1,4 @@
+*.zip
+CodeSystem-*.json
+Loinc_*/
+__pycache__/
